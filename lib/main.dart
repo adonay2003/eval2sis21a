@@ -4,6 +4,7 @@ import 'package:eval2sis21a/LoginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'nosotros.dart'; // Importa el archivo nosotros.dart
 import 'editar_producto.dart'; // Importa el archivo editar_producto.dart
 
@@ -34,8 +35,17 @@ class _ProductosScreenState extends State<ProductosScreen> {
   final nombreController = TextEditingController();
   final precioController = TextEditingController();
   final cantidadController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
 
   String mensaje = ''; // Para mostrar mensajes en la pantalla
+  
+void _signOut() async {
+  await _auth.signOut();
+  Navigator.of(context).pushReplacement(
+    MaterialPageRoute(builder: (context) => LoginScreen()),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +62,12 @@ class _ProductosScreenState extends State<ProductosScreen> {
                 MaterialPageRoute(builder: (context) => NosotrosScreen()), // Navega a la página "Nosotros"
               );
             },
-          ),
+            ),
+             IconButton(
+            icon: Icon(Icons.logout),  // Icono de cerrar sesión
+            onPressed: _signOut,  // Función que se llama al presionar el botón
+             ),
+          
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
