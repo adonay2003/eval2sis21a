@@ -1,10 +1,22 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:eval2sis21a/LoginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'nosotros.dart'; // Importa el archivo nosotros.dart
 import 'editar_producto.dart'; // Importa el archivo editar_producto.dart
+
+
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: LoginScreen(),  // Aquí cambiamos a LoginScreen
+    );
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,14 +24,6 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ProductosScreen(),
-    );
-  }
-}
 
 class ProductosScreen extends StatefulWidget {
   @override
