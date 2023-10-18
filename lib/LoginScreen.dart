@@ -16,20 +16,49 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Iniciar Sesión')),
+      appBar: AppBar(
+          title: Text(
+        'Iniciar Sesión',
+        style: TextStyle(color: Color.fromARGB(255, 14, 14, 14)),
+      )),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            SizedBox(
+              height: 225,
+            ),
+            Text(
+              'iniciar sesion',
+              style: TextStyle(
+                color: Color.fromARGB(255, 148, 4, 205),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
             TextField(
+              style: TextStyle(
+                color: Color.fromARGB(255, 148, 4, 205),
+              ),
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Correo electrónico'),
+              decoration: InputDecoration(
+                  labelText: 'Correo electrónico',
+                  icon: Icon(
+                    Icons.person,
+                    color: Colors.black,
+                  )),
             ),
             SizedBox(height: 10),
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: InputDecoration(labelText: 'Contraseña'),
+              decoration: InputDecoration(
+                  labelText: 'Contraseña',
+                  icon: Icon(
+                    Icons.lock,
+                    color: Colors.black,
+                  )),
             ),
             SizedBox(height: 10),
             ElevatedButton(
@@ -61,6 +90,9 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       setState(() {
         _errorMessage = e.toString();
+        SizedBox(
+          height: 790,
+        );
       });
     }
   }

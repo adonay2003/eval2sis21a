@@ -13,7 +13,9 @@ import 'editar_producto.dart'; // Importa el archivo editar_producto.dart
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: LoginScreen(),  // Aquí cambiamos a LoginScreen
     );
   }
@@ -27,6 +29,7 @@ void main() async {
 
 
 class ProductosScreen extends StatefulWidget {
+  
   @override
   _ProductosScreenState createState() => _ProductosScreenState();
 }
