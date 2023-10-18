@@ -1,25 +1,10 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:eval2sis21a/LoginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'nosotros.dart'; // Importa el archivo nosotros.dart
 import 'editar_producto.dart'; // Importa el archivo editar_producto.dart
-
-
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoginScreen(),  // Aquí cambiamos a LoginScreen
-    );
-  }
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,9 +12,16 @@ void main() async {
   runApp(MyApp());
 }
 
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: ProductosScreen(),
+    );
+  }
+}
 
 class ProductosScreen extends StatefulWidget {
-  
   @override
   _ProductosScreenState createState() => _ProductosScreenState();
 }
@@ -38,23 +30,15 @@ class _ProductosScreenState extends State<ProductosScreen> {
   final nombreController = TextEditingController();
   final precioController = TextEditingController();
   final cantidadController = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-
-  String mensaje = ''; // Para mostrar mensajes en la pantalla
-  
-void _signOut() async {
-  await _auth.signOut();
-  Navigator.of(context).pushReplacement(
-    MaterialPageRoute(builder: (context) => LoginScreen()),
-  );
-}
+  String mensaje = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Productos'), // Título de la pantalla
+        // ignore: prefer_const_constructors
+        title: Text('Productos'),
         actions: [
           // Botón para ir a la página "Nosotros"
           IconButton(
@@ -62,22 +46,17 @@ void _signOut() async {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => NosotrosScreen()), // Navega a la página "Nosotros"
+                MaterialPageRoute(builder: (context) => NosotrosScreen()), // Llama a la página "Nosotros"
               );
             },
-            ),
-             IconButton(
-            icon: Icon(Icons.logout),  // Icono de cerrar sesión
-            onPressed: _signOut,  // Función que se llama al presionar el botón
-             ),
-          
+          ),
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('tb_productos').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return CircularProgressIndicator(); // Muestra un indicador de carga si no hay datos disponibles
+            return CircularProgressIndicator();
           }
 
           List<Widget> productosWidgets = snapshot.data!.docs.map((document) {
@@ -92,36 +71,36 @@ void _signOut() async {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Nombre:', // Etiqueta para el nombre del producto
+                    'Nombre:',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(data['nombre']), // Muestra el nombre del producto
+                  Text(data['nombre']),
                   SizedBox(height: 10.0),
                   Text(
-                    'Precio:', // Etiqueta para el precio del producto
+                    'Precio:',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(data['precio'].toString()), // Muestra el precio del producto
+                  Text(data['precio'].toString()),
                   SizedBox(height: 10.0),
                   Text(
-                    'Stock:', // Etiqueta para el stock del producto
+                    'Stock:',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(data['stock'].toString()), // Muestra el stock del producto
+                  Text(data['stock'].toString()),
                   SizedBox(height: 10.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          _editarProducto(document.id); // Llama a la función para editar el producto
+                          _editarProducto(document.id); // Llama a la función para editar
                         },
                         style: ElevatedButton.styleFrom(primary: Colors.orange), // Botón de editar en naranja
                         child: Text('Editar'),
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          _confirmarEliminar(document.id); // Llama a la función para confirmar la eliminación del producto
+                          _confirmarEliminar(document.id); // Llama a la función para confirmar la eliminación
                         },
                         style: ElevatedButton.styleFrom(primary: Color.fromARGB(255, 170, 74, 18)), // Botón de eliminar en rojo
                         child: Text('Eliminar'),
@@ -134,7 +113,7 @@ void _signOut() async {
           }).toList();
 
           return ListView(
-            children: productosWidgets, // Muestra la lista de productos
+            children: productosWidgets,
           );
         },
       ),
@@ -142,16 +121,16 @@ void _signOut() async {
         onPressed: () async {
           final resultado = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => RegistrarProductoScreen()), // Navega a la pantalla de registro de productos
+            MaterialPageRoute(builder: (context) => RegistrarProductoScreen()),
           );
 
           if (resultado != null && resultado == 'guardado') {
             setState(() {
-              mensaje = 'Registro guardado'; // Muestra un mensaje cuando se guarda un producto
+              mensaje = 'Registro guardado';
             });
           }
         },
-        child: Icon(Icons.add), // Botón flotante para agregar nuevos productos
+        child: Icon(Icons.add),
       ),
       bottomSheet: mensaje.isNotEmpty
           ? Container(
@@ -161,7 +140,7 @@ void _signOut() async {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              mensaje, // Muestra un mensaje en la parte inferior de la pantalla
+              mensaje,
               style: TextStyle(color: Colors.white),
             ),
             SizedBox(width: 16.0),
@@ -171,7 +150,7 @@ void _signOut() async {
                   mensaje = '';
                 });
               },
-              child: Text('Cerrar'), // Botón para cerrar el mensaje
+              child: Text('Cerrar'),
             ),
           ],
         ),
@@ -194,7 +173,7 @@ void _signOut() async {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Confirmar eliminación'),
-          content: Text('¿Estás seguro de eliminar este documento?'), // Cuadro de diálogo de confirmación
+          content: Text('¿Estás seguro de eliminar este documento?'),
           actions: [
             ElevatedButton(
               onPressed: () {
@@ -205,7 +184,7 @@ void _signOut() async {
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Cierra el cuadro de diálogo
-                _eliminarProducto(documentId); // Llama a la función para eliminar el producto
+                _eliminarProducto(documentId); // Llama a la función para eliminar
               },
               style: ElevatedButton.styleFrom(primary: Colors.red), // Botón de eliminar en rojo
               child: Text('Eliminar'),
@@ -231,7 +210,7 @@ class RegistrarProductoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registrar Producto'), // Título de la pantalla de registro
+        title: Text('Registrar Producto'),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -248,16 +227,16 @@ class RegistrarProductoScreen extends StatelessWidget {
             children: [
               TextField(
                 controller: nombreController,
-                decoration: InputDecoration(labelText: 'Nombre'), // Campo de entrada para el nombre del producto
+                decoration: InputDecoration(labelText: 'Nombre'),
               ),
               TextField(
                 controller: precioController,
-                decoration: InputDecoration(labelText: 'Precio'), // Campo de entrada para el precio del producto
+                decoration: InputDecoration(labelText: 'Precio'),
                 keyboardType: TextInputType.number,
               ),
               TextField(
                 controller: cantidadController,
-                decoration: InputDecoration(labelText: 'Cantidad'), // Campo de entrada para la cantidad del producto
+                decoration: InputDecoration(labelText: 'Cantidad'),
                 keyboardType: TextInputType.number,
               ),
               SizedBox(height: 16.0),
@@ -265,7 +244,7 @@ class RegistrarProductoScreen extends StatelessWidget {
                 onPressed: () {
                   _agregarProducto(context);
                 },
-                child: Text('Registrar Producto'), // Botón para registrar el producto
+                child: Text('Registrar Producto'),
               ),
               SizedBox(height: 16.0),
               ElevatedButton(
@@ -273,7 +252,7 @@ class RegistrarProductoScreen extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(primary: Colors.red),
-                child: Text('Cancelar'), // Botón para cancelar el registro
+                child: Text('Cancelar'),
               ),
             ],
           ),
@@ -297,6 +276,6 @@ class RegistrarProductoScreen extends StatelessWidget {
     precioController.clear();
     cantidadController.clear();
 
-    Navigator.of(context).pop('guardado'); // Cierra la pantalla de registro y devuelve 'guardado' como resultado
+    Navigator.of(context).pop('guardado');
   }
 }
