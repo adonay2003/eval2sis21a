@@ -31,7 +31,8 @@ class _LoginScreenState extends State<LoginScreen> {
               CircleAvatar(
                 radius: 100.0,
                 backgroundColor: Colors.red,
-                backgroundImage: AssetImage('images/emilio.jpeg'),
+                backgroundImage: AssetImage('images/gerson.jpeg'),
+                
               ),
               Text(
                 'LOGIN',
@@ -44,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               TextField(
                 style: TextStyle(
-                  color: Color.fromARGB(255, 205, 4, 88),
+                  color: Color.fromARGB(255, 237, 15, 108),
                 ),
                 controller: _emailController,
                 decoration: InputDecoration(
@@ -70,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _signIn,
-                child: Text('Ingresar'),
+                child: Text('Ingresar',),
               ),
               SizedBox(height: 10),
               Text(
